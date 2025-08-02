@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+@theme {
+  --color-cblue-100: #055087;
+  --color-button: #0066b3;
+}
+
+.bg-hero {
+  background: url("./assets/hero-color.png") center/cover no-repeat;
+  background-color: #fff;
+}
+
+.popover {
+  clip-path: polygon(
+    0 100%,
+    100% 100%,
+    100% 66%,
+    38% 65%,
+    29% 51%,
+    21% 64%,
+    0 64%
+  );
+}
+
+.react-datepicker-wrapper{
+  width: 100%;
+}
+
+.custom-shadow{
+  box-shadow: 0px 0px 14px #c7c7c7;
+}
+
+.main-bg {
+  background: url("./assets/bg-main.png") no-repeat center center;
+  background-size: cover;
+}
+
+.single-bg {
+  background: url("./assets/single-main.png") no-repeat center center;
+  background-size: cover;
+}
+
