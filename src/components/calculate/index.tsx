@@ -148,6 +148,7 @@ const Calculate = ({
             </label>
             <DatePicker
               selected={endDate}
+              disabled={!startDate}
               onChange={(date) => setEndDate(date)}
               placeholderText={t("date")}
               dateFormat="dd.MM.yyyy"

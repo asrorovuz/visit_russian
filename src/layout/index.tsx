@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import heroImg from "../assets/hero.png";
 import Navbar from "../components/navbar";
+import Footer from "../components/footer";
 
 const Layout = () => {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -41,6 +42,7 @@ const Layout = () => {
         </div>
         <Outlet />
       </main>
+      <Footer/>
     </>
   );
 };
