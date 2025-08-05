@@ -5,12 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const PaymantPage = () => {
-  const navigate = useNavigate()
-  const {t} = useTranslation()
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const [cardInfo, setCardInfo] = useState({
     number: "",
     date: "",
     cvv: "",
+  });
+
+  const [errors, setErrors] = useState({
+    number: false,
+    date: false,
+    cvv: false,
   });
 
   const formatCardNumber = (value: string) =>
@@ -37,12 +44,28 @@ const PaymantPage = () => {
         : value;
 
     setCardInfo((prev) => ({ ...prev, [name]: formattedValue }));
+    setErrors((prev) => ({ ...prev, [name]: false })); // clear error on change
+  };
+
+  const validate = () => {
+    const newErrors = {
+      number: cardInfo.number.trim().length < 19, // 16 digits + 3 spaces
+      date: cardInfo.date.trim().length < 5, // MM/YY
+      cvv: cardInfo.cvv.trim().length < 3,
+    };
+
+    setErrors(newErrors);
+
+    return !Object.values(newErrors).some((e) => e);
   };
 
   const onPayment = () => {
+    const isValid = validate();
+    if (!isValid) return;
+
     console.log(cardInfo);
-    navigate("/success-payment")
-  }
+    navigate("/success-payment");
+  };
 
   return (
     <div className="relative z-20 top-[88px] px-5">
@@ -52,24 +75,16 @@ const PaymantPage = () => {
 
       <div className="bg-white rounded-2xl p-4 shadow-md mb-4">
         <p className="text-xs font-normal text-[#8C8B9B] text-center mb-[19px]">
-           {t("payment.subtitle")} 23:59:46
+          {t("payment.subtitle")} 23:59:46
         </p>
 
         <div className="flex justify-between mb-3">
           <div className="w-[69px] h-[33px]">
-            <img
-              className="w-full h-full object-cover"
-              src={logoBlack}
-              alt="logo"
-            />
+            <img className="w-full h-full object-cover" src={logoBlack} alt="logo" />
           </div>
           <div className="flex flex-col gap-y-2 items-end">
-            <p className="text-[14px] font-normal text-[#191919]">
-              ART12006 30.07.2025
-            </p>
-            <p className="text-[#055087] font-semibold text-[16px]">
-              6 879,23 ₽
-            </p>
+            <p className="text-[14px] font-normal text-[#191919]">ART12006 30.07.2025</p>
+            <p className="text-[#055087] font-semibold text-[16px]">6 879,23 ₽</p>
           </div>
         </div>
 
@@ -82,9 +97,12 @@ const PaymantPage = () => {
               name="number"
               value={cardInfo.number}
               onChange={handleChange}
+              maxLength={19}
               type="text"
               placeholder="1234 5678 9012 3456"
-              className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+              className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+                errors.number ? "border-red-500" : "border-transparent"
+              }`}
             />
           </div>
 
@@ -99,28 +117,30 @@ const PaymantPage = () => {
                 onChange={handleChange}
                 type="text"
                 placeholder="MM/YY"
-                className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+                className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+                  errors.date ? "border-red-500" : "border-transparent"
+                }`}
               />
             </div>
 
             <div className="w-1/2">
-              <label className="mb-1 text-[14px] font-medium leading-[140%]">
-                CVV:
-              </label>
+              <label className="mb-1 text-[14px] font-medium leading-[140%]">CVV:</label>
               <input
                 name="cvv"
                 value={cardInfo.cvv}
                 onChange={handleChange}
                 type="text"
                 placeholder="123"
-                className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+                className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+                  errors.cvv ? "border-red-500" : "border-transparent"
+                }`}
               />
             </div>
           </div>
         </div>
       </div>
 
-      <CustomButton onClick={onPayment} text={"Pay Now"}/>
+      <CustomButton onClick={onPayment} text={"Pay Now"} />
     </div>
   );
 };
