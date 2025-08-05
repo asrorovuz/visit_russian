@@ -14,19 +14,28 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const dropdownRef = useRef(null);
-  const lang = i18n.language;
   const [country, setCountry] = useState("");
+  const [currentLang, setCurrentLang] = useState(i18n.language);
 
-  const onChangeCountry = (e: any) => {
-    setCountry(e.target.innerText);
-    setIsOpen(false);
-  };
+  // 🔄 Til o'zgarsa, bayroq va country ni yangilash
+  useEffect(() => {
+    const handleLangChange = (lng: string) => {
+      setCurrentLang(lng);
+      setCountry(lng === "en" ? "Uzbekistan" : "Узбекистан");
+    };
 
-  const handleLangChange = (lng: string) => {
-    i18n.changeLanguage(lng);
-    setToggle(false);
-  };
+    i18n.on("languageChanged", handleLangChange);
 
+    // Boshlanishida ham chaqiramiz
+    handleLangChange(i18n.language);
+
+    // Cleanup
+    return () => {
+      i18n.off("languageChanged", handleLangChange);
+    };
+  }, [i18n]);
+
+  // Dropdown tashqarisiga bosilsa yopish
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (
@@ -40,21 +49,29 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    setCountry(lang === "en" ? "Uzbekistan" : "Узбекистан")
-  }, [lang])
+  const handleLangChange = (lng: string) => {
+    i18n.changeLanguage(lng);
+    setToggle(false);
+  };
 
-  useEffect(() => {
-    const storedLanguage = localStorage.getItem("i18nextLng");
-    if (storedLanguage) {
-      i18n.changeLanguage(storedLanguage || "en");
-    } else {
-      i18n.changeLanguage("en");
+  const handleCountrySelect = (e: any) => {
+    setCountry(e.target.innerText);
+    setIsOpen(false);
+  };
+
+  const getFlag = (lang: string) => {
+    switch (lang) {
+      case "ru":
+        return ruImg;
+      case "en":
+      default:
+        return enImg;
     }
-  }, [i18n]);
+  };
 
   return (
     <div className="px-4 flex justify-between items-center">
+      {/* Logo + Country Selector */}
       <div className="relative flex items-center gap-x-[17px]">
         <div className="w-[68px] h-[33px]">
           <Link to={"/"}>
@@ -63,23 +80,22 @@ const Navbar = () => {
         </div>
 
         <CountryPopover country={country} setIsOpen={setIsOpen} />
-        <Modal
-          title={t("navbar.title")}
-          setIsOpen={setIsOpen}
-          isOpen={isOpen}
-        >
+
+        <Modal title={t("navbar.title")} setIsOpen={setIsOpen} isOpen={isOpen}>
           <div className="max-h-[70vh] overflow-y-auto py-3">
             <ul
-              onClick={onChangeCountry}
+              onClick={handleCountrySelect}
               className="flex flex-col gap-y-1 text-gray-700"
             >
               {countries?.map((item: any, index: number) => (
-                <li key={index}>{item?.[lang]}</li>
+                <li key={index}>{item?.[currentLang]}</li>
               ))}
             </ul>
           </div>
         </Modal>
       </div>
+
+      {/* Phone + Language Selector */}
       <div className="relative z-10 flex items-center gap-x-3">
         <a className="w-8 h-8" href="tel:+998999999999">
           <img
@@ -96,14 +112,14 @@ const Navbar = () => {
           >
             <img
               className="w-full h-full object-cover"
-              src={lang === "en" ? enImg : ruImg}
+              src={getFlag(currentLang)}
               alt="language"
             />
           </button>
 
           {toggle && (
             <div className="absolute top-full right-0 mt-2 w-10 bg-white shadow-md rounded z-30">
-              {lang !== "en" && (
+              {currentLang !== "en" && (
                 <div
                   onClick={() => handleLangChange("en")}
                   className="cursor-pointer p-1 hover:bg-gray-100"
@@ -111,7 +127,7 @@ const Navbar = () => {
                   <img src={enImg} alt="English" />
                 </div>
               )}
-              {lang !== "ru" && (
+              {currentLang !== "ru" && (
                 <div
                   onClick={() => handleLangChange("ru")}
                   className="cursor-pointer p-1 hover:bg-gray-100"
