@@ -23,13 +23,14 @@ const Calculate = ({
   );
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showAgeDropdown, setShowAgeDropdown] = useState<boolean>(false);
+  const [selectedAge, setSelectedAge] = useState<number>(30); // ✅ 30 yosh default tanlangan
   const [errors, setErrors] = useState({
     startDate: "",
     endDate: "",
     tourists: "",
   });
   const endDateRef = useRef<any>(null);
-
+  const age30Ref = useRef<HTMLDivElement>(null);
   const ageDropdownRef = useRef<HTMLDivElement>(null);
   const ageOptions = Array.from({ length: 101 }, (_, i) => i);
 
@@ -38,6 +39,7 @@ const Calculate = ({
   };
 
   const addTourist = (age: number) => {
+    setSelectedAge(age); // ✅ tanlangan yoshni saqlash
     setTourists((prev: any) => [
       ...prev,
       { id: Date.now(), age, firstname: "", lastname: "", isBuy: false },
@@ -91,16 +93,13 @@ const Calculate = ({
     setVisableCard(true);
   };
 
-  // Checkbox true bo'lsa avtomatik 365 kun qo‘shiladi
   useEffect(() => {
     if (startDate && checkbox) {
-      // Checkbox true bo‘lsa 365 kun qo‘shiladi va endDate avtomatik belgilanadi
       const newEndDate = new Date(startDate);
       newEndDate.setDate(newEndDate.getDate() + 365);
       setEndDate(newEndDate);
       setSelectedDays(365);
     } else if (startDate && endDate && !checkbox) {
-      // Checkbox false bo‘lsa, startDate va endDate orasidagi farq hisoblanadi
       const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       setSelectedDays(diffDays);
@@ -109,7 +108,6 @@ const Calculate = ({
     }
   }, [startDate, endDate, checkbox]);
 
-  // Age dropdown tashqarisiga bosilsa yopiladi
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -127,9 +125,22 @@ const Calculate = ({
     if (startDate && !checkbox) {
       setTimeout(() => {
         endDateRef.current?.setOpen(true);
-      }, 100); // biroz delay beramiz, DOM tayyor bo'lishi uchun
+      }, 100);
     }
   }, [startDate, checkbox]);
+
+  // ✅ Dropdown ochilganda 30 yoshga scroll bo'lishi
+  useEffect(() => {
+    if (showAgeDropdown) {
+      setTimeout(() => {
+        age30Ref.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 0);
+      setSelectedAge(30)
+    }
+  }, [showAgeDropdown]);
 
   return (
     <div className="px-5">
@@ -174,9 +185,8 @@ const Calculate = ({
               className="w-full"
               calendarClassName="custom-datepicker"
               customInput={<CustomInput />}
-              minDate={startDate} 
+              minDate={startDate}
             />
-
             {errors.endDate && !endDate && (
               <div className="text-red-500 text-sm mt-1">{errors.endDate}</div>
             )}
@@ -259,8 +269,13 @@ const Calculate = ({
                       {ageOptions.map((age) => (
                         <div
                           key={age}
+                          ref={age === 30 ? age30Ref : null}
                           onClick={() => addTourist(age)}
-                          className="px-4 py-2 hover:bg-blue-100 cursor-pointer text-sm"
+                          className={`px-4 py-2 cursor-pointer text-sm ${
+                            age === selectedAge
+                              ? "bg-blue-100"
+                              : "hover:bg-blue-100"
+                          }`}
                         >
                           {age} {t("calculate.age")}
                         </div>
@@ -273,14 +288,17 @@ const Calculate = ({
           )}
         </div>
 
-        {/* Error Message */}
         {errors.tourists && !tourists?.length && (
           <div className="text-red-500 text-sm mt-2">{errors?.tourists}</div>
         )}
       </div>
 
       <div className="mt-4 w-full">
-        <CustomButton width={"w-full"} onClick={handleSubmit} text={t("calculate.button1")} />
+        <CustomButton
+          width={"w-full"}
+          onClick={handleSubmit}
+          text={t("calculate.button1")}
+        />
       </div>
     </div>
   );

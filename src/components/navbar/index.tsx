@@ -14,7 +14,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const dropdownRef = useRef(null);
-  const lang = localStorage.getItem("i18nextLng") || "en";
+  const lang = i18n.language;
   const [country, setCountry] = useState("");
 
   const onChangeCountry = (e: any) => {
@@ -24,7 +24,6 @@ const Navbar = () => {
 
   const handleLangChange = (lng: string) => {
     i18n.changeLanguage(lng);
-    localStorage.setItem("i18nextLng", lng);
     setToggle(false);
   };
 
@@ -44,6 +43,15 @@ const Navbar = () => {
   useEffect(() => {
     setCountry(lang === "en" ? "Uzbekistan" : "Узбекистан")
   }, [lang])
+
+  useEffect(() => {
+    const storedLanguage = localStorage.getItem("i18nextLng");
+    if (storedLanguage) {
+      i18n.changeLanguage(storedLanguage || "en");
+    } else {
+      i18n.changeLanguage("en");
+    }
+  }, [i18n]);
 
   return (
     <div className="px-4 flex justify-between items-center">

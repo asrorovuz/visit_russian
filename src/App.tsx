@@ -7,8 +7,13 @@ import SuccessPayment from "./pages/success-payment";
 import FaildPayment from "./pages/faild-payment";
 import Profile from "./pages/profile";
 import NotFoundPage from "./pages/not-found";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    localStorage.setItem("i18nextLng", "en");
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

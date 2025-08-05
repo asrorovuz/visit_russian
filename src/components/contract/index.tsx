@@ -106,7 +106,7 @@ const Contract = () => {
                   />
                 </svg>
               </span>
-              <p className="absolute max-w-[250px] bottom-full left-2/3 -translate-x-1/3 mb-2 hidden group-hover:block bg-[#bce3ff] text-gray-900 text-[16px] px-2 py-1 rounded shadow-lg z-10">
+              <p className="absolute w-[250px] bottom-full left-2/3 -translate-x-1/3 mb-2 hidden group-hover:block bg-[#bce3ff] text-gray-900 text-[16px] px-2 py-1 rounded shadow-lg z-10">
                 {t("tooltip.contract")}
               </p>
             </div>
