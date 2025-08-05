@@ -145,6 +145,7 @@ const Calculate = ({
           </label>
           <DatePicker
             selected={startDate}
+            minDate={new Date()}
             onChange={(date: any) => setStartDate(date)}
             placeholderText={t("date")}
             dateFormat="dd.MM.yyyy"
