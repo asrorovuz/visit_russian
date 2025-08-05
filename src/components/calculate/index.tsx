@@ -15,8 +15,8 @@ const Calculate = ({
   setVisableCard,
 }: any) => {
   const { t } = useTranslation();
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [selectedDays, setSelectedDays] = useState<number>(365);
   const [checkbox, setCheckbox] = useState<boolean>(
     calcData?.dayCheck || false
@@ -40,7 +40,7 @@ const Calculate = ({
   const addTourist = (age: number) => {
     setTourists((prev: any) => [
       ...prev,
-      { id: Date.now(), age, firsname: "", lastname: "", isBuy: false },
+      { id: Date.now(), age, firstname: "", lastname: "", isBuy: false },
     ]);
     setShowAgeDropdown(false);
   };
@@ -85,7 +85,7 @@ const Calculate = ({
         lastname: "",
         firstname: "",
         email: [{ value: "" }],
-        bithOfData: undefined,
+        birthOfDate: undefined,
       },
     }));
     setVisableCard(true);
@@ -145,7 +145,7 @@ const Calculate = ({
           </label>
           <DatePicker
             selected={startDate}
-            onChange={(date) => setStartDate(date)}
+            onChange={(date: any) => setStartDate(date)}
             placeholderText={t("date")}
             dateFormat="dd.MM.yyyy"
             className="w-full"
@@ -167,13 +167,15 @@ const Calculate = ({
               ref={endDateRef}
               selected={endDate}
               disabled={!startDate}
-              onChange={(date) => setEndDate(date)}
+              onChange={(date: any) => setEndDate(date)}
               placeholderText={t("date")}
               dateFormat="dd.MM.yyyy"
               className="w-full"
               calendarClassName="custom-datepicker"
               customInput={<CustomInput />}
+              minDate={startDate} 
             />
+
             {errors.endDate && !endDate && (
               <div className="text-red-500 text-sm mt-1">{errors.endDate}</div>
             )}
@@ -245,7 +247,7 @@ const Calculate = ({
                 <div className="relative" ref={ageDropdownRef}>
                   <button
                     onClick={() => setShowAgeDropdown((prev) => !prev)}
-                    className="bg-button text-white w-max py-2 px-3 rounded-md text-sm flex items-center"
+                    className="bg-button w-full text-white justify-between py-2 px-3 rounded-md text-sm flex items-center"
                   >
                     {t("calculate.button")}
                     <IoChevronDown className="ml-1" />
@@ -277,7 +279,7 @@ const Calculate = ({
       </div>
 
       <div className="mt-4 w-full">
-        <CustomButton onClick={handleSubmit} text={t("calculate.button1")} />
+        <CustomButton width={"w-full"} onClick={handleSubmit} text={t("calculate.button1")} />
       </div>
     </div>
   );

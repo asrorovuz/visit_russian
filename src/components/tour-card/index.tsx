@@ -3,7 +3,7 @@ import CustomInput from "../../ui/custom-input";
 import { IoCloseSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
-const TourCard = ({ item, index, setCalcData, onRemove }: any) => {
+const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
   const {t} = useTranslation()
   const onChangeInput = (e: any) => {
     const { name, value } = e.target;
@@ -31,12 +31,12 @@ const TourCard = ({ item, index, setCalcData, onRemove }: any) => {
     });
   };
 
-  const onChangeBirthDate = (date: any) => {
+  const onChangebirthOfDate = (date: any) => {
     setCalcData((prev: any) => {
       const updatedTravelers = [...prev.travelers];
       updatedTravelers[index] = {
         ...updatedTravelers[index],
-        birthDate: date,
+        birthOfDate: date,
       };
       return { ...prev, travelers: updatedTravelers };
     });
@@ -78,11 +78,11 @@ const TourCard = ({ item, index, setCalcData, onRemove }: any) => {
           {t("traveler.firstName")}
         </label>
         <input
-          name="firsname"
-          value={item.firsname || ""}
+          name="firstname"
+          value={item.firstname || ""}
           onChange={onChangeInput}
           type="text"
-          className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.firstname ? "border-red-500" : "border-transparent"}`}
         />
       </div>
 
@@ -95,7 +95,7 @@ const TourCard = ({ item, index, setCalcData, onRemove }: any) => {
           value={item.lastname || ""}
           onChange={onChangeInput}
           type="text"
-          className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.lastname ? "border-red-500" : "border-transparent"}`}
         />
       </div>
 
@@ -104,11 +104,11 @@ const TourCard = ({ item, index, setCalcData, onRemove }: any) => {
           {t("traveler.birthOfDate")}
         </label>
         <DatePicker
-          selected={item.birthDate || null}
-          onChange={onChangeBirthDate}
+          selected={item.birthOfDate || null}
+          onChange={onChangebirthOfDate}
           placeholderText={t("date")}
           dateFormat="dd.MM.yyyy"
-          className="w-full"
+          className={`w-full border ${error && !item?.birthOfDate ? "border-red-500" : "border-transparent"}`}
           calendarClassName="custom-datepicker"
           customInput={<CustomInput />}
         />

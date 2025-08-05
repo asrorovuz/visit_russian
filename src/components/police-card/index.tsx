@@ -5,8 +5,9 @@ import CustomButton from "../../ui/button";
 import { BiPlus } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 
-const PoliceCard = ({ item, setCalcData }: any) => {
+const PoliceCard = ({ item, setCalcData, error }: any) => {
   const { t } = useTranslation();
+
   const onChangeInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     emailIndex?: number
@@ -38,12 +39,12 @@ const PoliceCard = ({ item, setCalcData }: any) => {
     });
   };
 
-  const onChangeBirthDate = (date: Date | null) => {
+  const onChangebirthOfDate = (date: Date | null) => {
     setCalcData((prev: any) => ({
       ...prev,
       police: {
         ...prev.police,
-        birthDate: date,
+        birthOfDate: date,
       },
     }));
   };
@@ -56,10 +57,6 @@ const PoliceCard = ({ item, setCalcData }: any) => {
         email: [...(prev.police?.email || []), { value: "" }],
       },
     }));
-  };
-
-  const isValidEmail = (email: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const removeEmailField = (index: number) => {
@@ -76,6 +73,10 @@ const PoliceCard = ({ item, setCalcData }: any) => {
         },
       };
     });
+  };
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   return (
@@ -110,11 +111,11 @@ const PoliceCard = ({ item, setCalcData }: any) => {
           {t("traveler.firstName")}
         </label>
         <input
-          name="firsname"
-          value={item.firsname || ""}
+          name="firstname"
+          value={item.firstname || ""}
           onChange={onChangeInput}
           type="text"
-          className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.firstname ? "border-red-500" : "border-transparent"}`}
         />
       </div>
 
@@ -128,7 +129,7 @@ const PoliceCard = ({ item, setCalcData }: any) => {
           value={item.lastname || ""}
           onChange={onChangeInput}
           type="text"
-          className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.lastname ? "border-red-500" : "border-transparent"}`}
         />
       </div>
 
@@ -138,17 +139,17 @@ const PoliceCard = ({ item, setCalcData }: any) => {
           {t("traveler.birthOfDate")}
         </label>
         <DatePicker
-          selected={item.birthDate || null}
-          onChange={onChangeBirthDate}
+          selected={item.birthOfDate || undefined}
+          onChange={onChangebirthOfDate}
           placeholderText={t("date")}
           dateFormat="dd.MM.yyyy"
-          className="w-full"
+          className={`w-full border ${error && !item?.birthOfDate ? "border-red-500" : "border-transparent"}`}
           calendarClassName="custom-datepicker"
           customInput={<CustomInput />}
         />
       </div>
 
-      {/* ✅ Email fields (object-based) */}
+      {/* Email fields */}
       <div className="w-full mb-3">
         <label className="mb-1 text-[14px] font-medium leading-[140%]">
           {t("traveler.email")}
@@ -157,23 +158,31 @@ const PoliceCard = ({ item, setCalcData }: any) => {
           (emailObj: { value: string }, i: number) => {
             const isInvalid = emailObj.value && !isValidEmail(emailObj.value);
             return (
-              <div key={i} className="flex items-center gap-2 mb-[15px]">
-                <input
-                  name="email"
-                  value={emailObj.value}
-                  onChange={(e) => onChangeInput(e, i)}
-                  type="email"
-                  className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] 
-            ${isInvalid ? "border border-red-500" : ""}`}
-                />
-                {item.email?.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeEmailField(i)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <IoCloseSharp />
-                  </button>
+              <div key={i} className="mb-[15px]">
+                <div className="flex items-center gap-2">
+                  <input
+                    name="email"
+                    value={emailObj.value}
+                    onChange={(e) => onChangeInput(e, i)}
+                    type="email"
+                    className={`py-2 px-2.5 w-full outline-0 rounded-lg bg-[#F3F6FB]
+    border ${isInvalid || (error && !emailObj.value) ? "border-red-500" : "border-transparent"}`}
+                  />
+
+                  {item.email?.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeEmailField(i)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <IoCloseSharp />
+                    </button>
+                  )}
+                </div>
+                {isInvalid || (error && !emailObj.value) && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {t("invalidEmail") || "Invalid email address"}
+                  </p>
                 )}
               </div>
             );

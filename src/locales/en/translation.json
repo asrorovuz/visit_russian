@@ -1,6 +1,7 @@
 {
   "date": "dd.mm.yyyy",
   "police": "Pay for an insurance policy",
+  "invalidEmail": "Please enter a valid email address",
   "navbar": {
     "question": "Is your country",
     "yes": "yes",

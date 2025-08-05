@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const Footer = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   return (
-    <footer className="fixed bottom-0 left-0 z-50 w-full bg-white shadow-md flex justify-around items-center py-3">
+    <footer className="fixed bottom-0  z-50 max-w-[400px] w-full bg-white shadow-md flex justify-around items-center py-3">
       {/* Home */}
       <Link
         to="/"
@@ -18,9 +18,7 @@ const Footer = () => {
 
       {/* Floating Button */}
       <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-2 bg-white p-3 rounded-full custom-shadow flex justify-center items-center">
-        <button className="bg-gradient-to-r from-button to-blue-700 rounded-full w-14 h-14 shadow-lg">
-          
-        </button>
+        <button className="bg-gradient-to-r from-button to-blue-700 rounded-full w-14 h-14 shadow-lg"></button>
       </div>
 
       {/* Profile */}

@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [visableCard, setVisableCard] = useState(false);
   const [tourists, setTourists] = useState<any>([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [calcData, setCalcData] = useState({
     startDate: undefined,
     endDate: undefined,
@@ -45,9 +47,49 @@ const HomePage = () => {
       ],
     }));
   };
+  const validateCalcData = (data: any, setError: (val: boolean) => void) => {
+    let isValid = true;
+
+    // Travelers check
+    if (!Array.isArray(data.travelers) || data.travelers.length === 0) {
+      isValid = false;
+    } else {
+      for (const traveler of data.travelers) {
+        if (!traveler.firstname?.trim() || !traveler.lastname?.trim()) {
+          isValid = false;
+          break;
+        }
+      }
+    }
+
+    // Police check
+    const police = data.police;
+    if (
+      !police ||
+      !police.firstname?.trim() ||
+      !police.lastname?.trim() ||
+      !police.birthOfDate ||
+      !Array.isArray(police.email) ||
+      police.email.length === 0 ||
+      !police.email[0]?.value?.trim()
+    ) {
+      isValid = false;
+    }
+
+    setError(!isValid);
+    return isValid;
+  };
+
   const onSubmit = () => {
-    navigate("/payment")
-  }
+    setLoading(true)
+    const isValid = validateCalcData(calcData, setError);
+    setLoading(false)
+    if (!isValid) return;
+
+    setLoading(false)
+    navigate("/payment");
+  };
+
   useEffect(() => {
     if (visableCard) {
       setTimeout(() => {
@@ -76,6 +118,7 @@ const HomePage = () => {
           {calcData?.travelers?.map((item: any, index: number) => (
             <TourCard
               setCalcData={setCalcData}
+              error={error}
               key={item?.id}
               item={item}
               index={index}
@@ -89,7 +132,7 @@ const HomePage = () => {
       )}
       {visableCard ? (
         <div className="px-5">
-          <PoliceCard item={calcData?.police} setCalcData={setCalcData} />
+          <PoliceCard error={error} item={calcData?.police} setCalcData={setCalcData} />
         </div>
       ) : (
         ""
@@ -98,10 +141,11 @@ const HomePage = () => {
         <div className="px-5">
           <button
             className="w-full bg-button block py-[16px] px-2 rounded-2xl"
+            disabled={loading}
             onClick={onSubmit}
           >
             <div className="text-center text[18px] font-bold text-white leading-6 mb-[11px]">
-              {t("police")} (69,00 €)
+              {loading ? "Loading..." : <>{t("police")} (69,00 €)</>}
             </div>
             <div className="text-center text-white text-[15px] font-semibold leading-6 ">
               6 879,23 rub.

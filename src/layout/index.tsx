@@ -23,27 +23,29 @@ const Layout = () => {
   }, []);
 
   return (
-    <>
-      <header className="w-full absolute z-50 top-5">
-        <Navbar />
-      </header>
-      <main
-        ref={mainRef}
-        className={`relative z-10 w-full min-h-screen pb-[96px] ${
-          isShort ? "single-bg" : "main-bg"
-        }`}
-      >
-        <div className="absolute h-[60vh] w-full bg-hero overflow-hidden">
-          <img
-            src={heroImg}
-            alt="Mountains"
-            className="absolute -top-20 inset-0 w-full h-full opacity-[7%] z-10"
-          />
-        </div>
-        <Outlet />
-      </main>
-      <Footer/>
-    </>
+    <div className="w-full flex justify-center">
+      <div className="max-w-[400px] max-h-[80vh] relative w-full">
+        <header className="w-full absolute z-50 top-5">
+          <Navbar />
+        </header>
+        <main
+          ref={mainRef}
+          className={`relative z-10 w-full min-h-screen pb-[96px] ${
+            isShort ? "single-bg" : "main-bg"
+          }`}
+        >
+          <div className="absolute h-[60vh] w-full bg-hero overflow-hidden">
+            <img
+              src={heroImg}
+              alt="Mountains"
+              className="absolute -top-20 inset-0 w-full h-full opacity-[7%] z-10"
+            />
+          </div>
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+    </div>
   );
 };
 
