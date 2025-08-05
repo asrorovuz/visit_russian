@@ -14,7 +14,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const dropdownRef = useRef(null);
-  const lang = i18n.language;
+  const lang = localStorage.getItem("i18nextLng") || "en";
   const [country, setCountry] = useState("");
 
   const onChangeCountry = (e: any) => {
@@ -24,6 +24,7 @@ const Navbar = () => {
 
   const handleLangChange = (lng: string) => {
     i18n.changeLanguage(lng);
+    localStorage.setItem("i18nextLng", lng);
     setToggle(false);
   };
 

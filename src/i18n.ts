@@ -11,12 +11,18 @@ const resources = {
   ru: { translation: translationRU },
 };
 
+const language = localStorage.getItem("i18nextLng");
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "en", // yoki "uz"
+    detection: {
+      order: ["querystring", "cookie", "navigator"],
+      caches: [],
+    },
+    fallbackLng: language || "en",
     interpolation: {
       escapeValue: false,
     },

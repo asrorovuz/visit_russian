@@ -110,5 +110,10 @@
     "title": "Page Not Found",
     "description": "Sorry, the page you're looking for doesn't exist.",
     "backHome": "Back to Home"
+  },
+  "tooltip": {
+    "contract": "If you plan to exercise, include this risk",
+    "tour": "First name, last name and date of birth are sufficient to identify traveler by a insurance company",
+    "police": "18 + citizen of any country."
   }
 }
