@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Calculate from "../../components/calculate";
 import Contract from "../../components/contract";
 import TourCard from "../../components/tour-card";
 import CustomButton from "../../ui/button";
 import PoliceCard from "../../components/police-card";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate()
   const [visableCard, setVisableCard] = useState(false);
   const [tourists, setTourists] = useState<any>([]);
   const [calcData, setCalcData] = useState({
@@ -18,6 +19,7 @@ const HomePage = () => {
     travelers: [],
     police: {},
   });
+  const cardSectionRef = useRef<HTMLDivElement>(null);
 
   const removeTraveler = (index: number) => {
     setCalcData((prev: any) => {
@@ -43,7 +45,16 @@ const HomePage = () => {
       ],
     }));
   };
-
+  const onSubmit = () => {
+    navigate("/payment")
+  }
+  useEffect(() => {
+    if (visableCard) {
+      setTimeout(() => {
+        cardSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, [visableCard]);
   return (
     <div className="relative z-20 top-[88px] flex flex-col gap-y-10">
       <Calculate
@@ -53,7 +64,13 @@ const HomePage = () => {
         setTourists={setTourists}
         setVisableCard={setVisableCard}
       />
-      {calcData?.travelers?.length ? <Contract /> : ""}
+      {calcData?.travelers?.length ? (
+        <div ref={cardSectionRef}>
+          <Contract />
+        </div>
+      ) : (
+        ""
+      )}
       {calcData?.travelers?.length ? (
         <div className="flex flex-col p-5 gap-y-[15px]">
           {calcData?.travelers?.map((item: any, index: number) => (
@@ -79,9 +96,9 @@ const HomePage = () => {
       )}
       {visableCard ? (
         <div className="px-5">
-          <Link
-            className="bg-button block py-[16px] px-2 rounded-2xl"
-            to={"/payment"}
+          <button
+            className="w-full bg-button block py-[16px] px-2 rounded-2xl"
+            onClick={onSubmit}
           >
             <div className="text-center text[18px] font-bold text-white leading-6 mb-[11px]">
               {t("police")} (69,00 €)
@@ -89,13 +106,13 @@ const HomePage = () => {
             <div className="text-center text-white text-[15px] font-semibold leading-6 ">
               6 879,23 rub.
             </div>
-          </Link>
+          </button>
         </div>
       ) : (
         ""
       )}
-      <div className="px-5 text-[13px] font-normal text-[#8C8B9B] text-center">
-        {t("footer.pol1")} {" "}
+      <div className="px-5 text-[13px] font-normal text-[#8C8B9B] text-center pb-20">
+        {t("footer.pol1")}{" "}
         <a
           className="underline"
           href="https://www.solidtravel.shop/include/files/Personal%20Data%20Processing%20Policy.pdf"

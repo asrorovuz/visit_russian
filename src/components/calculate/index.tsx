@@ -28,6 +28,7 @@ const Calculate = ({
     endDate: "",
     tourists: "",
   });
+  const endDateRef = useRef<any>(null);
 
   const ageDropdownRef = useRef<HTMLDivElement>(null);
   const ageOptions = Array.from({ length: 101 }, (_, i) => i);
@@ -92,13 +93,21 @@ const Calculate = ({
 
   // Checkbox true bo'lsa avtomatik 365 kun qo‘shiladi
   useEffect(() => {
-    if (checkbox && startDate) {
+    if (startDate && checkbox) {
+      // Checkbox true bo‘lsa 365 kun qo‘shiladi va endDate avtomatik belgilanadi
       const newEndDate = new Date(startDate);
       newEndDate.setDate(newEndDate.getDate() + 365);
       setEndDate(newEndDate);
+      setSelectedDays(365);
+    } else if (startDate && endDate && !checkbox) {
+      // Checkbox false bo‘lsa, startDate va endDate orasidagi farq hisoblanadi
+      const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      setSelectedDays(diffDays);
+    } else {
+      setSelectedDays(0);
     }
-    setSelectedDays(0);
-  }, [startDate, checkbox]);
+  }, [startDate, endDate, checkbox]);
 
   // Age dropdown tashqarisiga bosilsa yopiladi
   useEffect(() => {
@@ -113,6 +122,14 @@ const Calculate = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (startDate && !checkbox) {
+      setTimeout(() => {
+        endDateRef.current?.setOpen(true);
+      }, 100); // biroz delay beramiz, DOM tayyor bo'lishi uchun
+    }
+  }, [startDate, checkbox]);
 
   return (
     <div className="px-5">
@@ -147,6 +164,7 @@ const Calculate = ({
               {t("calculate.lastDate")}
             </label>
             <DatePicker
+              ref={endDateRef}
               selected={endDate}
               disabled={!startDate}
               onChange={(date) => setEndDate(date)}
@@ -188,14 +206,17 @@ const Calculate = ({
         {/* Tourists */}
         <div className="w-full mb-3">
           <label className="mb-1 text-[14px] font-medium leading-[140%]">
-            {t("calculate.traveler")} {tourists.length ? `(${tourists.length})` : null}
+            {t("calculate.traveler")}{" "}
+            {tourists.length ? `(${tourists.length})` : null}
           </label>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="bg-[#F3F6FB] rounded-lg py-[7px] px-3 w-full h-[38px] font-normal text-[14px] text-left"
           >
             {tourists.length
-              ? tourists.map((t: any) => t.age).join(", ") + " " + t("calculate.year")
+              ? tourists.map((t: any) => t.age).join(", ") +
+                " " +
+                t("calculate.year")
               : t("calculate.countTourist")}
           </button>
 
@@ -208,7 +229,8 @@ const Calculate = ({
                     className="flex justify-between items-center bg-gray-100 text-sm px-3 py-2 rounded-md"
                   >
                     <span>
-                      {index + 1} {t("calculate.tourist")}: {tourist.age} {t("calculate.year")}
+                      {index + 1} {t("calculate.tourist")}: {tourist.age}{" "}
+                      {t("calculate.year")}
                     </span>
                     <button
                       onClick={() => removeTourist(tourist.id)}

@@ -6,7 +6,7 @@ import { BiPlus } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 
 const PoliceCard = ({ item, setCalcData }: any) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const onChangeInput = (
     e: React.ChangeEvent<HTMLInputElement>,
     emailIndex?: number
@@ -58,6 +58,10 @@ const PoliceCard = ({ item, setCalcData }: any) => {
     }));
   };
 
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const removeEmailField = (index: number) => {
     setCalcData((prev: any) => {
       const updatedEmails = [...(prev.police?.email || [])];
@@ -73,11 +77,12 @@ const PoliceCard = ({ item, setCalcData }: any) => {
       };
     });
   };
-  console.log(item);
 
   return (
     <div className="bg-white rounded-2xl p-4 custom-shadow">
-      <h4 className="font-semibold text-[16px] mb-[15px]">{t("traveler.titlePlice")}</h4>
+      <h4 className="font-semibold text-[16px] mb-[15px]">
+        {t("traveler.titlePlice")}
+      </h4>
 
       <div className="text-[16px] font-normal text-[#8C8B9B] flex justify-between items-center mb-[15px]">
         <p className="w-4/5">{t("traveler.subTitlePolice")}</p>
@@ -149,27 +154,32 @@ const PoliceCard = ({ item, setCalcData }: any) => {
           {t("traveler.email")}
         </label>
         {(item?.email || [{ value: "" }]).map(
-          (emailObj: { value: string }, i: number) => (
-            <div key={i} className="flex items-center gap-2 mb-[15px]">
-              <input
-                name="email"
-                value={emailObj.value}
-                onChange={(e) => onChangeInput(e, i)}
-                type="email"
-                className="py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB]"
-              />
-              {item.email?.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeEmailField(i)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <IoCloseSharp />
-                </button>
-              )}
-            </div>
-          )
+          (emailObj: { value: string }, i: number) => {
+            const isInvalid = emailObj.value && !isValidEmail(emailObj.value);
+            return (
+              <div key={i} className="flex items-center gap-2 mb-[15px]">
+                <input
+                  name="email"
+                  value={emailObj.value}
+                  onChange={(e) => onChangeInput(e, i)}
+                  type="email"
+                  className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] 
+            ${isInvalid ? "border border-red-500" : ""}`}
+                />
+                {item.email?.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeEmailField(i)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <IoCloseSharp />
+                  </button>
+                )}
+              </div>
+            );
+          }
         )}
+
         <CustomButton
           py={"py-[5px]"}
           size={"text-[13px]"}
