@@ -4,7 +4,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const onChangeInput = (e: any) => {
     const { name, value } = e.target;
 
@@ -22,12 +22,30 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
     const { name, checked } = e.target;
 
     setCalcData((prev: any) => {
-      const updatedTravelers = [...prev.travelers];
-      updatedTravelers[index] = {
-        ...updatedTravelers[index],
-        [name]: checked,
+      const updatedTravelers = prev.travelers.map(
+        (traveler: any, i: number) => {
+          return {
+            ...traveler,
+            [name]: i === index ? checked : false,
+          };
+        }
+      );
+
+      // Agar current indexdagi traveler tanlangan bo‘lsa (checked), policega shuni yozamiz
+      const selectedTraveler = updatedTravelers[index];
+
+      return {
+        ...prev,
+        travelers: updatedTravelers,
+        police: checked
+          ? {
+              firstname: selectedTraveler.firstname,
+              lastname: selectedTraveler.lastname,
+              birthOfDate: selectedTraveler.birthOfDate,
+              email: [{ value: "" }], // Email bo'sh, foydalanuvchi to‘ldiradi
+            }
+          : prev.police, // Agar uncheck bo‘lsa, police ni o‘zgartirmaymiz
       };
-      return { ...prev, travelers: updatedTravelers };
     });
   };
 
@@ -82,7 +100,9 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           value={item.firstname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.firstname ? "border-red-500" : "border-transparent"}`}
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+            error && !item?.firstname ? "border-red-500" : "border-transparent"
+          }`}
         />
       </div>
 
@@ -95,7 +115,9 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           value={item.lastname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.lastname ? "border-red-500" : "border-transparent"}`}
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+            error && !item?.lastname ? "border-red-500" : "border-transparent"
+          }`}
         />
       </div>
 
@@ -108,11 +130,14 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           onChange={onChangebirthOfDate}
           placeholderText={t("date")}
           dateFormat="dd.MM.yyyy"
-          className={`w-full border ${error && !item?.birthOfDate ? "border-red-500" : "border-transparent"}`}
+          className={`w-full border ${
+            error && !item?.birthOfDate
+              ? "border-red-500"
+              : "border-transparent"
+          }`}
           calendarClassName="custom-datepicker"
           customInput={<CustomInput />}
         />
-        
       </div>
 
       <div className="flex items-center text-[#8C8B9B] gap-x-[7px]">

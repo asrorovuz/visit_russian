@@ -39,7 +39,7 @@ const Contract = () => {
           </div>
         </div>
         <div className="rounded-md py-[10px] px-2 border border-[#E5E3F9] text-[14px] font-normal text-[#8C8B9B] mb-[15px]">
-          {t("contract.coverage")}{" "}
+          {t("contract.coverge")}{" "}
           <span className="text-[15px] font-semibold text-[#055087] ml-1.5">
             35,000 €
           </span>

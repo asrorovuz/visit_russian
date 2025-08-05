@@ -39,7 +39,7 @@ const HomePage = () => {
         ...prev.travelers,
         {
           id: Date.now(),
-          age: null,
+          age: 30,
           firstname: "",
           lastname: "",
           isBuy: false,
