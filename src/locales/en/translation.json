@@ -105,5 +105,10 @@
     "pol4": "consent to the processing of personal data",
     "home": "Home",
     "profile": "Profile"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you're looking for doesn't exist.",
+    "backHome": "Back to Home"
   }
 }
