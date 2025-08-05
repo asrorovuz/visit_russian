@@ -1,8 +1,10 @@
 import { GoHomeFill } from "react-icons/go";
 import { CgProfile } from "react-icons/cg";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const {t} = useTranslation()
   return (
     <footer className="fixed bottom-0 left-0 z-50 w-full bg-white shadow-md flex justify-around items-center py-3">
       {/* Home */}
@@ -11,7 +13,7 @@ const Footer = () => {
         className="flex flex-col items-center text-gray-500 hover:text-button font-medium text-sm"
       >
         <GoHomeFill size={24} />
-        <span>Home</span>
+        <span>{t("footer.home")}</span>
       </Link>
 
       {/* Floating Button */}
@@ -23,11 +25,11 @@ const Footer = () => {
 
       {/* Profile */}
       <Link
-        to="/"
+        to="/profile"
         className="flex flex-col items-center text-gray-500 hover:text-button font-medium text-sm"
       >
         <CgProfile size={24} />
-        <span>Profile</span>
+        <span>{t("footer.profile")}</span>
       </Link>
     </footer>
   );

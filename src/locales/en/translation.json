@@ -90,10 +90,19 @@
     "buttonEmail": "Add another E-mail",
     "email": "E-mail"
   },
+  "profile": {
+    "title": "Profile",
+    "personal": "Personal information",
+    "history": "Travel history",
+    "settings": "Settings",
+    "support": "Help & Support"
+  },
   "footer": {
     "pol1": "I am familiar with the",
     "pol2": "User Agreement, offer",
     "pol3": "agreement and I",
-    "pol4": "consent to the processing of personal data"
+    "pol4": "consent to the processing of personal data",
+    "home": "Home",
+    "profile": "Profile"
   }
 }
