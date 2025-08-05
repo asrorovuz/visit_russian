@@ -81,6 +81,7 @@ const HomePage = () => {
   };
 
   const onSubmit = () => {
+    
     setLoading(true)
     const isValid = validateCalcData(calcData, setError);
     setLoading(false)

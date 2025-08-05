@@ -115,7 +115,9 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           value={item.firstname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.firstname ? "border-red-500" : "border-transparent"}`}
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+            error && !item?.firstname ? "border-red-500" : "border-transparent"
+          }`}
         />
       </div>
 
@@ -129,7 +131,9 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           value={item.lastname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${error && !item?.lastname ? "border-red-500" : "border-transparent"}`}
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+            error && !item?.lastname ? "border-red-500" : "border-transparent"
+          }`}
         />
       </div>
 
@@ -143,7 +147,11 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           onChange={onChangebirthOfDate}
           placeholderText={t("date")}
           dateFormat="dd.MM.yyyy"
-          className={`w-full border ${error && !item?.birthOfDate ? "border-red-500" : "border-transparent"}`}
+          className={`w-full border ${
+            error && !item?.birthOfDate
+              ? "border-red-500"
+              : "border-transparent"
+          }`}
           calendarClassName="custom-datepicker"
           customInput={<CustomInput />}
         />
@@ -166,7 +174,11 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
                     onChange={(e) => onChangeInput(e, i)}
                     type="email"
                     className={`py-2 px-2.5 w-full outline-0 rounded-lg bg-[#F3F6FB]
-    border ${isInvalid || (error && !emailObj.value) ? "border-red-500" : "border-transparent"}`}
+    border ${
+      isInvalid || (error && !emailObj.value)
+        ? "border-red-500"
+        : "border-transparent"
+    }`}
                   />
 
                   {item.email?.length > 1 && (
@@ -179,11 +191,6 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
                     </button>
                   )}
                 </div>
-                {isInvalid || (error && !emailObj.value) && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {t("invalidEmail") || "Invalid email address"}
-                  </p>
-                )}
               </div>
             );
           }

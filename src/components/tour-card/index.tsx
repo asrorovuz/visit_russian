@@ -112,6 +112,7 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           calendarClassName="custom-datepicker"
           customInput={<CustomInput />}
         />
+        
       </div>
 
       <div className="flex items-center text-[#8C8B9B] gap-x-[7px]">
