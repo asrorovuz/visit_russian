@@ -39,12 +39,27 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
     });
   };
 
-  const onChangebirthOfDate = (date: Date | null) => {
+  // ✅ Qo‘lda sana yozishni ham qo‘llab-quvvatlovchi funktsiya
+  const onChangebirthOfDate = (date: Date | string | null) => {
+    let parsedDate: Date | null = null;
+
+    if (typeof date === "string") {
+      const parts = date.split(".");
+      if (parts.length === 3) {
+        const [day, month, year] = parts.map((p) => parseInt(p, 10));
+        if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+          parsedDate = new Date(year, month - 1, day);
+        }
+      }
+    } else {
+      parsedDate = date;
+    }
+
     setCalcData((prev: any) => ({
       ...prev,
       police: {
         ...prev.police,
-        birthOfDate: date,
+        birthOfDate: parsedDate,
       },
     }));
   };
@@ -150,6 +165,7 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
         <DatePicker
           selected={item.birthOfDate || undefined}
           onChange={onChangebirthOfDate}
+          onChangeRaw={(e: any) => onChangebirthOfDate(e.target.value)}
           placeholderText={t("date")}
           dateFormat="dd.MM.yyyy"
           className={`w-full border ${
@@ -159,6 +175,8 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           }`}
           calendarClassName="custom-datepicker"
           customInput={<CustomInput />}
+          isClearable
+          autoComplete="off"
         />
       </div>
 
