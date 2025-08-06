@@ -45,3 +45,17 @@
   background-size: cover;
 }
 
+/* Ant Design DatePicker custom style */
+.ant-picker.ant-picker-large.ant-picker-outlined.css-dev-only-do-not-override-1vjf2v5.custom-datepicker.w-full {
+  background-color: #F3F6FB;
+  border: 1px solid transparent;
+  border-radius: 0.5rem; /* same as rounded-lg */
+  box-shadow: none;
+}
+
+.ant-picker.ant-picker-large.ant-picker-outlined.css-dev-only-do-not-override-1vjf2v5.custom-datepicker.w-full:focus,
+.ant-picker.ant-picker-large.ant-picker-outlined.css-dev-only-do-not-override-1vjf2v5.custom-datepicker.w-full-focused {
+  border: 1px solid #3b82f6; /* optional: blue border on focus */
+  box-shadow: none !important;
+  outline: none !important;
+}

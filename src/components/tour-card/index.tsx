@@ -1,7 +1,7 @@
-import DatePicker from "react-datepicker";
-import CustomInput from "../../ui/custom-input";
 import { IoCloseSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
+import { DatePicker } from "antd";
 
 const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
   const { t } = useTranslation();
@@ -49,12 +49,12 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
     });
   };
 
-  const onChangebirthOfDate = (date: any) => {
+  const onChange = (_: any, dateString: any) => {
     setCalcData((prev: any) => {
       const updatedTravelers = [...prev.travelers];
       updatedTravelers[index] = {
         ...updatedTravelers[index],
-        birthOfDate: date,
+        birthOfDate: dateString,
       };
       return { ...prev, travelers: updatedTravelers };
     });
@@ -105,7 +105,7 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           value={item.firstname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border outline-0 ${
             error && !item?.firstname ? "border-red-500" : "border-transparent"
           }`}
         />
@@ -120,7 +120,7 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           value={item.lastname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border outline-0 ${
             error && !item?.lastname ? "border-red-500" : "border-transparent"
           }`}
         />
@@ -131,17 +131,19 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
           {t("traveler.birthOfDate")}
         </label>
         <DatePicker
-          selected={item.birthOfDate || null}
-          onChange={onChangebirthOfDate}
-          placeholderText={t("date")}
-          dateFormat="dd.MM.yyyy"
-          className={`w-full border ${
-            error && !item?.birthOfDate
-              ? "border-red-500"
-              : "border-transparent"
-          }`}
-          calendarClassName="custom-datepicker"
-          customInput={<CustomInput />}
+          value={
+            item.birthOfDate ? dayjs(item.birthOfDate, "DD-MM-YYYY") : null
+          }
+          status={error && !item?.birthOfDate ? "error" : ""}
+          placeholder="dd-mm-yyyy"
+          format={{
+            format: "DD-MM-YYYY",
+            type: "mask",
+          }}
+
+          className={`custom-datepicker w-full ${error && !item?.birthOfDate ? "outline-1 outline-red-500" : "border-transparent"}`}
+          size="large"
+          onChange={onChange}
         />
       </div>
 

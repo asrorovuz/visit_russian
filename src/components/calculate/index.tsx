@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import DatePicker from "react-datepicker";
-import "../../style/custom-datepicker.css";
-import CustomInput from "../../ui/custom-input";
 import CustomButton from "../../ui/button";
 import { IoCloseCircle, IoChevronDown } from "react-icons/io5";
 import DaySelect from "../../ui/day-select";
 import { useTranslation } from "react-i18next";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
 
 const Calculate = ({
   calcData,
@@ -15,6 +14,7 @@ const Calculate = ({
   setVisableCard,
 }: any) => {
   const { t } = useTranslation();
+
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [selectedDays, setSelectedDays] = useState<number>(365);
@@ -23,15 +23,19 @@ const Calculate = ({
   );
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showAgeDropdown, setShowAgeDropdown] = useState<boolean>(false);
-  const [selectedAge, setSelectedAge] = useState<number>(30); // ✅ 30 yosh default tanlangan
+  const [selectedAge, setSelectedAge] = useState<number>(30);
+  const [isStartOpen, setIsStartOpen] = useState<boolean>(false);
+
   const [errors, setErrors] = useState({
     startDate: "",
     endDate: "",
     tourists: "",
   });
-  const endDateRef = useRef<any>(null);
+
+  // const endDateRef = useRef<any>(null);
   const age30Ref = useRef<HTMLDivElement>(null);
   const ageDropdownRef = useRef<HTMLDivElement>(null);
+
   const ageOptions = Array.from({ length: 101 }, (_, i) => i);
 
   const removeTourist = (id: number) => {
@@ -39,7 +43,7 @@ const Calculate = ({
   };
 
   const addTourist = (age: number) => {
-    setSelectedAge(age); // ✅ tanlangan yoshni saqlash
+    setSelectedAge(age);
     setTourists((prev: any) => [
       ...prev,
       { id: Date.now(), age, firstname: "", lastname: "", isBuy: false },
@@ -90,6 +94,7 @@ const Calculate = ({
         birthOfDate: undefined,
       },
     }));
+
     setVisableCard(true);
   };
 
@@ -122,15 +127,6 @@ const Calculate = ({
   }, []);
 
   useEffect(() => {
-    if (startDate && !checkbox) {
-      setTimeout(() => {
-        endDateRef.current?.setOpen(true);
-      }, 100);
-    }
-  }, [startDate, checkbox]);
-
-  // ✅ Dropdown ochilganda 30 yoshga scroll bo'lishi
-  useEffect(() => {
     if (showAgeDropdown) {
       setTimeout(() => {
         age30Ref.current?.scrollIntoView({
@@ -138,7 +134,7 @@ const Calculate = ({
           block: "center",
         });
       }, 0);
-      setSelectedAge(30)
+      setSelectedAge(30);
     }
   }, [showAgeDropdown]);
 
@@ -149,51 +145,62 @@ const Calculate = ({
       </h1>
 
       <div className="bg-white rounded-2xl p-4 shadow-md">
-        {/* Start Date */}
         <div className="w-full mb-3">
           <label className="mb-1 text-[14px] font-medium leading-[140%]">
             {t("calculate.firstDate")}
           </label>
           <DatePicker
-            selected={startDate}
-            minDate={new Date()}
-            onChange={(date: any) => setStartDate(date)}
-            placeholderText={t("date")}
-            dateFormat="dd.MM.yyyy"
-            className="w-full"
-            calendarClassName="custom-datepicker"
-            customInput={<CustomInput />}
+            open={isStartOpen}
+            onOpenChange={(open) => setIsStartOpen(open)}
+            value={startDate ? dayjs(startDate) : null}
+            placeholder="dd-mm-yyyy"
+            format="DD-MM-YYYY"
+            className="custom-datepicker w-full"
+            size="large"
+            inputReadOnly
+            disabledDate={(current) =>
+              current ? current < dayjs().startOf("day") : false
+            }
+            onChange={(date) => {
+              setStartDate(date?.toDate()), setIsStartOpen(false);
+            }}
           />
-          {errors.startDate && !startDate && (
+
+          {errors.startDate && (
             <div className="text-red-500 text-sm mt-1">{errors.startDate}</div>
           )}
         </div>
 
-        {/* End Date */}
         {!checkbox && (
           <div className="w-full mb-3">
             <label className="mb-1 text-[14px] font-medium leading-[140%]">
               {t("calculate.lastDate")}
             </label>
             <DatePicker
-              ref={endDateRef}
-              selected={endDate}
-              disabled={!startDate}
-              onChange={(date: any) => setEndDate(date)}
-              placeholderText={t("date")}
-              dateFormat="dd.MM.yyyy"
-              className="w-full"
-              calendarClassName="custom-datepicker"
-              customInput={<CustomInput />}
-              minDate={startDate}
+              value={endDate ? dayjs(endDate) : null}
+              placeholder="dd-mm-yyyy"
+              format="DD-MM-YYYY"
+              className="custom-datepicker w-full"
+              size="large"
+              inputReadOnly
+              onChange={(date) => setEndDate(date?.toDate())}
+              disabledDate={(current) =>
+                startDate ? current && current < dayjs(startDate) : false
+              }
+              onFocus={() => {
+                if (!startDate) {
+                  setIsStartOpen(true);
+                }else{
+                  setIsOpen(false)
+                }
+              }}
             />
-            {errors.endDate && !endDate && (
+            {errors.endDate && (
               <div className="text-red-500 text-sm mt-1">{errors.endDate}</div>
             )}
           </div>
         )}
 
-        {/* Days + Checkbox */}
         <div className="w-full mb-3">
           <label className="mb-1 text-[14px] font-medium leading-[140%]">
             {t("calculate.days")} <span>{selectedDays || 0}</span>
@@ -216,7 +223,6 @@ const Calculate = ({
           />
         )}
 
-        {/* Tourists */}
         <div className="w-full mb-3">
           <label className="mb-1 text-[14px] font-medium leading-[140%]">
             {t("calculate.traveler")}{" "}
@@ -254,7 +260,6 @@ const Calculate = ({
                   </div>
                 ))}
 
-                {/* Age Dropdown */}
                 <div className="relative" ref={ageDropdownRef}>
                   <button
                     onClick={() => setShowAgeDropdown((prev) => !prev)}
@@ -288,14 +293,14 @@ const Calculate = ({
           )}
         </div>
 
-        {errors.tourists && !tourists?.length && (
+        {errors.tourists && (
           <div className="text-red-500 text-sm mt-2">{errors?.tourists}</div>
         )}
       </div>
 
       <div className="mt-4 w-full">
         <CustomButton
-          width={"w-full"}
+          width="w-full"
           onClick={handleSubmit}
           text={t("calculate.button1")}
         />

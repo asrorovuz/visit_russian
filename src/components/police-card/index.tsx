@@ -1,9 +1,9 @@
-import DatePicker from "react-datepicker";
-import CustomInput from "../../ui/custom-input";
 import { IoCloseSharp } from "react-icons/io5";
 import CustomButton from "../../ui/button";
 import { BiPlus } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
+import { DatePicker, type DatePickerProps } from "antd";
 
 const PoliceCard = ({ item, setCalcData, error }: any) => {
   const { t } = useTranslation();
@@ -40,28 +40,10 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
   };
 
   // ✅ Qo‘lda sana yozishni ham qo‘llab-quvvatlovchi funktsiya
-  const onChangebirthOfDate = (date: Date | string | null) => {
-    let parsedDate: Date | null = null;
-
-    if (typeof date === "string") {
-      const parts = date.split(".");
-      if (parts.length === 3) {
-        const [day, month, year] = parts.map((p) => parseInt(p, 10));
-        if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-          parsedDate = new Date(year, month - 1, day);
-        }
-      }
-    } else {
-      parsedDate = date;
-    }
-
-    setCalcData((prev: any) => ({
-      ...prev,
-      police: {
-        ...prev.police,
-        birthOfDate: parsedDate,
-      },
-    }));
+  const onChange: DatePickerProps["onChange"] = (_, dateString) => {
+    setCalcData((prev: any) => {
+      return { ...prev, police: { ...item, birthOfDate: dateString } };
+    });
   };
 
   const addEmailField = () => {
@@ -135,7 +117,7 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           value={item.firstname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] outline-0 border ${
             error && !item?.firstname ? "border-red-500" : "border-transparent"
           }`}
         />
@@ -151,7 +133,7 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           value={item.lastname || ""}
           onChange={onChangeInput}
           type="text"
-          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border ${
+          className={`py-2 px-2.5 w-full rounded-lg bg-[#F3F6FB] border outline-0 ${
             error && !item?.lastname ? "border-red-500" : "border-transparent"
           }`}
         />
@@ -163,20 +145,17 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
           {t("traveler.birthOfDate")}
         </label>
         <DatePicker
-          selected={item.birthOfDate || undefined}
-          onChange={onChangebirthOfDate}
-          onChangeRaw={(e: any) => onChangebirthOfDate(e.target.value)}
-          placeholderText={t("date")}
-          dateFormat="dd.MM.yyyy"
-          className={`w-full border ${
-            error && !item?.birthOfDate
-              ? "border-red-500"
-              : "border-transparent"
-          }`}
-          calendarClassName="custom-datepicker"
-          customInput={<CustomInput />}
-          isClearable
-          autoComplete="off"
+          value={
+            item.birthOfDate ? dayjs(item.birthOfDate, "DD-MM-YYYY") : null
+          }
+          placeholder="dd-mm-yyyy"
+          format={{
+            format: "DD-MM-YYYY",
+            type: "mask",
+          }}
+          className={`custom-datepicker w-full ${error && !item?.birthOfDate ? "outline-1 outline-red-500" : "border-transparent"}`}
+          size="large"
+          onChange={onChange}
         />
       </div>
 
