@@ -3,7 +3,7 @@ import CustomButton from "../../ui/button";
 import { BiPlus } from "react-icons/bi";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import { DatePicker, type DatePickerProps } from "antd";
+import { DatePicker, Tooltip, type DatePickerProps } from "antd";
 
 const PoliceCard = ({ item, setCalcData, error }: any) => {
   const { t } = useTranslation();
@@ -84,7 +84,7 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
 
       <div className="text-[16px] font-normal text-[#8C8B9B] flex justify-between items-center mb-[15px]">
         <p className="w-4/5">{t("traveler.subTitlePolice")}</p>
-        <div className="relative group w-fit">
+        <Tooltip placement="top" color="blue" title={t("tooltip.police")}>
           <span>
             <svg
               width="19"
@@ -94,17 +94,14 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fillRule="evenodd"
-                clipRule="evenodd"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
                 d="M16.2292 9.49998C16.2292 13.2164 13.2164 16.2291 9.5 16.2291C5.78359 16.2291 2.77084 13.2164 2.77084 9.49998C2.77084 5.78356 5.78359 2.77081 9.5 2.77081C13.2164 2.77081 16.2292 5.78356 16.2292 9.49998ZM17.4167 9.49998C17.4167 13.8722 13.8722 17.4166 9.5 17.4166C5.12775 17.4166 1.58334 13.8722 1.58334 9.49998C1.58334 5.12772 5.12775 1.58331 9.5 1.58331C13.8722 1.58331 17.4167 5.12772 17.4167 9.49998ZM10.0523 10.7493H8.94401L8.76668 8.39323V5.69994H10.2297V8.39323L10.0523 10.7493ZM10.2297 13.4583H8.76668V11.9288H10.2297V13.4583Z"
                 fill="#055087"
               />
             </svg>
           </span>
-          <p className="absolute bottom-full right-[20px] mb-2 hidden group-hover:block bg-[#bce3ff] text-gray-900 text-[16px] px-2 py-1 rounded shadow-lg z-10 whitespace-nowrap">
-            {t("tooltip.police")}
-          </p>
-        </div>
+        </Tooltip>
       </div>
 
       {/* First name */}
@@ -153,7 +150,11 @@ const PoliceCard = ({ item, setCalcData, error }: any) => {
             format: "DD-MM-YYYY",
             type: "mask",
           }}
-          className={`custom-datepicker w-full ${error && !item?.birthOfDate ? "outline-1 outline-red-500" : "border-transparent"}`}
+          className={`custom-datepicker w-full ${
+            error && !item?.birthOfDate
+              ? "outline-1 outline-red-500"
+              : "border-transparent"
+          }`}
           size="large"
           onChange={onChange}
         />

@@ -1,7 +1,7 @@
 import { IoCloseSharp } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import { DatePicker } from "antd";
+import { DatePicker, Tooltip } from "antd";
 
 const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
   const { t } = useTranslation();
@@ -73,7 +73,7 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
 
       <div className="text-[16px] font-normal text-[#8C8B9B] flex justify-between items-center mb-[15px]">
         <p className="w-4/5">{t("traveler.subTitle")}</p>
-        <div className="relative group w-fit">
+        <Tooltip placement="top" color="blue" title={t("tooltip.tour")}>
           <span>
             <svg
               width="19"
@@ -90,10 +90,7 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
               />
             </svg>
           </span>
-          <p className="absolute w-[200px] bottom-full right-[20px] mb-2 hidden group-hover:block bg-[#bce3ff] text-gray-900 text-[16px] px-2 py-1 rounded shadow-lg z-10 ">
-            {t("tooltip.tour")}
-          </p>
-        </div>
+        </Tooltip>
       </div>
 
       <div className="w-full mb-3">
@@ -140,8 +137,11 @@ const TourCard = ({ item, index, setCalcData, onRemove, error }: any) => {
             format: "DD-MM-YYYY",
             type: "mask",
           }}
-
-          className={`custom-datepicker w-full ${error && !item?.birthOfDate ? "outline-1 outline-red-500" : "border-transparent"}`}
+          className={`custom-datepicker w-full ${
+            error && !item?.birthOfDate
+              ? "outline-1 outline-red-500"
+              : "border-transparent"
+          }`}
           size="large"
           onChange={onChange}
         />
