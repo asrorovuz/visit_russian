@@ -1,0 +1,20 @@
+/* Oy va yil yozuvi (eng yuqoridagi qism) */
+.custom-calendar .react-datepicker__current-month {
+  background-color: #e0f0ff; /* och ko‘k */
+  font-weight: 600;
+  padding: 8px 0;
+  color: #1e3a8a; /* ixtiyoriy: matn rangi (chuqur ko‘k) */
+}
+
+/* react-datepicker header qismi */
+.custom-calendar .react-datepicker__header {
+  background-color: #e0f0ff; /* och ko'k */
+  border-bottom: 1px solid #ccc;
+}
+
+/* optional: sanalar hover/focus bo'yicha */
+.custom-calendar .react-datepicker__day--selected,
+.custom-calendar .react-datepicker__day--keyboard-selected {
+  background-color: #0b63f8;
+  color: white;
+}

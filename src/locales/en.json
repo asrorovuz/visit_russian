@@ -1,0 +1,119 @@
+{
+  "date": "dd.mm.yyyy",
+  "police": "Pay for an insurance policy",
+  "invalidEmail": "Please enter a valid email address",
+  "navbar": {
+    "question": "Is your country",
+    "yes": "yes",
+    "other": "Another country",
+    "title": "Select your country?"
+  },
+  "success": {
+    "title": "Your payment is successful!",
+    "subtitle": "Thank you for choosing our service!",
+    "content": "All documents will be sent to your e-mail within 30 minutes! If the letter is not received, you can contact our support team",
+    "button": "Pay Now"
+  },
+  "faild": {
+    "title": "Your payment failed!",
+    "subtitle": "Unfortunately, an error is occurred!",
+    "subtitle2": "Possible reasons:",
+    "lists": [
+      "There are not enough funds on the card",
+      "The card limit is exceeded",
+      "Card details entered incorrectly",
+      "The card is expired",
+      "The card cannot be used for online payments",
+      "The 3D Secure service is not activated (an SMS with an one-time code is sent to your phone to confirm the operation)."
+    ],
+    "police": "Please contact your support service and we will provide alternative payment variants."
+  },
+  "payment": {
+    "title": "Payment",
+    "subtitle": "Time left",
+    "cardnumber": "Card number",
+    "exprate": "Expiry date:"
+  },
+  "calculate": {
+    "title": "Insurance for visa to Russia",
+    "firstDate": "The first trip date:",
+    "lastDate": "The last trip date:",
+    "days": "Amount of days:",
+    "police": "Annual insurance policy",
+    "traveler": "Travelers",
+    "countTourist": "Number of tourists",
+    "tourist": "tourist",
+    "year": "years",
+    "age": "age",
+    "button": "Add a tourist ",
+    "button1": "Calculate",
+    "errors": {
+      "startDate": "Start date is required.",
+      "endDate": "End date is required.",
+      "len": "Please add at least one tourist."
+    },
+    "select": "Select days",
+    "selectTitle": "Number of days in a year:",
+    "day": "days"
+  },
+  "contract": {
+    "title": "Your contract",
+    "subTitleL": "What is included in Your insurance policy:",
+    "lists": {
+      "n1": "In",
+      "n2": "partnership",
+      "n3": "with:"
+    },
+    "coverge": "Insurance coverage:",
+    "button": "Show All",
+    "police": "Cost of the insurance policy:",
+    "active": "Activity",
+    "listTag": [
+      "Covid-19",
+      "Doctor's home visit",
+      "Hospitalization",
+      "Visit to the clinic",
+      "Medication costs",
+      "Transportation"
+    ]
+  },
+  "traveler": {
+    "title": "Data for",
+    "title2": "traveler",
+    "titlePlice": "Data of the buyer",
+    "subTitlePolice": "Who can buy a policy?",
+    "subTitle": "Why don't you need a passport for registration?",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "birthOfDate": "Birth date:",
+    "access": "The traveler is the buyer",
+    "button": "Add a traveler",
+    "buttonEmail": "Add another E-mail",
+    "email": "E-mail"
+  },
+  "profile": {
+    "title": "Profile",
+    "personal": "Personal information",
+    "history": "Travel history",
+    "settings": "Settings",
+    "support": "Help & Support"
+  },
+  "footer": {
+    "pol1": "I am familiar with the",
+    "pol2": "User Agreement, offer",
+    "pol3": "agreement and I",
+    "pol4": "consent to the processing of personal data",
+    "home": "Home",
+    "profile": "Profile"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "Sorry, the page you're looking for doesn't exist.",
+    "backHome": "Back to Home"
+  },
+  "tooltip": {
+    "contract": "If you plan to exercise, include this risk",
+    "tour": "First name, last name and date of birth are sufficient to identify traveler by a insurance company",
+    "police": "18 + citizen of any country."
+  }
+}
